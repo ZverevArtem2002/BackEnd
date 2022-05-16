@@ -8,10 +8,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   include('form.php');
 }
 else{
-    $regex_name='[a-z,A-Z,а-я,А-Я,-]*$';
-    $regex_email='[a-z]+\w*@[a-z]+\.[a-z]{2,4}$';
+    $regex_name="/[a-z,A-Z,а-я,А-Я,-]*$/";
+    $regex_email="/[a-z]+\w*@[a-z]+\.[a-z]{2,4}$/";
     $errors = FALSE;
-    if (empty($_POST['name']) or !preg_match($regex_name,$_POST['name'])) {
+    if (empty($_POST['name']) or !preg_matchAll($regex_name,$_POST['name'])) {
     print('Заполните имя правильно.<br/>');
     $errors = TRUE;
     }
@@ -48,7 +48,7 @@ else{
     $stmt = $db->prepare("INSERT INTO application SET name=?,email=?,year=?,sex=?,limb=?,bio=?");
     $stmt -> execute(array($_POST['name'],$_POST['email'],$_POST['year'],$_POST['limb'],$_POST['bio']));
     $id=$db->lastInsertId();
-    $pwr=$db->prepare("INSERT INTO supers SET power_name=?,uid=?");
+    $pwr=$db->prepare("INSERT INTO supers SET p_name=?,uid=?");
     foreach($_POST['power'] as $power){ 
         $pwr->execute(array($power,$id));  
     }
